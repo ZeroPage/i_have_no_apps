@@ -17,7 +17,6 @@
         </activity>
         <activity android:name=".guide.GuideActivity" />
         <activity android:name=".login.LoginActivity" />
-        <activity android:name=".main.MainActivity"></activity>
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="9107947bd697f13b3f0701d750994aa15e158582" />
