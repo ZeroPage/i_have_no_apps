@@ -1,25 +1,12 @@
 <component name="libraryTable">
   <library name="support-core-ui-25.1.1">
-<<<<<<< HEAD
-    <ANNOTATIONS>
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.1.1/annotations.zip!/" />
-    </ANNOTATIONS>
     <CLASSES>
-      <root url="jar://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.1.1/jars/classes.jar!/" />
-      <root url="file://$PROJECT_DIR$/app/build/intermediates/exploded-aar/com.android.support/support-core-ui/25.1.1/res" />
+      <root url="jar://$USER_HOME$/.android/build-cache/5f4ad508e5c7fd422aaec07ac6d39fbc450f120c/output/jars/classes.jar!/" />
+      <root url="file://$USER_HOME$/.android/build-cache/5f4ad508e5c7fd422aaec07ac6d39fbc450f120c/output/res" />
     </CLASSES>
     <JAVADOC />
     <SOURCES>
       <root url="jar://$USER_HOME$/Library/Android/sdk/extras/android/m2repository/com/android/support/support-core-ui/25.1.1/support-core-ui-25.1.1-sources.jar!/" />
-=======
-    <CLASSES>
-      <root url="jar://$USER_HOME$/.android/build-cache/469193a37e5f173b817421d6e9c9d673675e393c/output/jars/classes.jar!/" />
-      <root url="file://$USER_HOME$/.android/build-cache/469193a37e5f173b817421d6e9c9d673675e393c/output/res" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES>
-      <root url="jar://$USER_HOME$/AppData/Local/Android/sdk/extras/android/m2repository/com/android/support/support-core-ui/25.1.1/support-core-ui-25.1.1-sources.jar!/" />
->>>>>>> 49458abcfe29dc94994d46fef8a3989fafba9469
     </SOURCES>
   </library>
 </component>
