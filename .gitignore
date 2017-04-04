@@ -1,6 +1,9 @@
 
 # Created by https://www.gitignore.io/api/java,android,androidstudio
 
+### For Secret Files By SengHyun, Lee ###
+google-services.json
+
 ### Android ###
 # Built application files
 *.apk
