@@ -6,6 +6,8 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.crashlytics.android.Crashlytics;
+import com.jrummyapps.android.widget.AnimatedSvgView;
+
 import io.fabric.sdk.android.Fabric;
 import org.zeropage.apps.zeropage.R;
 import org.zeropage.apps.zeropage.guide.GuideActivity;
@@ -17,14 +19,17 @@ public class SplashActivity extends Activity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash);
 
+        AnimatedSvgView svgView = (AnimatedSvgView) findViewById(R.id.animated_svg_view);
+        svgView.start();
+
         Handler handler = new Handler();
-        handler.postDelayed(new Runnable() {
+        /*handler.postDelayed(new Runnable() {
             @Override
             public void run() {
                 startActivity(new Intent(SplashActivity.this, GuideActivity.class));
                 finish();
             }
-        }, 2*1000);
+        }, 2*1000);*/
 
         //crash report 테스트
         //FirebaseCrash.report(new Exception("My first Android non-fatal error"));
