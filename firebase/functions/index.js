@@ -9,6 +9,7 @@ var expressApp = express()
 
 expressApp.use(bodyParser.json())
 expressApp.use(bodyParser.urlencoded({ extended: true }))
+admin.initializeApp(functions.config().firebase)
 
 exports.Authenticate = functions.https.onRequest(function(appRequest, appResponse) {
     var apiUri = 'http://zerobot.herokuapp.com/hubot/otp/' + appRequest.body.username
@@ -21,7 +22,7 @@ exports.Authenticate = functions.https.onRequest(function(appRequest, appRespons
         },
         json: true,
         resolveWithFullResponse: true,
-        simple: false
+        simple: true
     };
 
     console.log('Request to "' + apiUri 
@@ -38,4 +39,23 @@ exports.Authenticate = functions.https.onRequest(function(appRequest, appRespons
             console.log(error);
             appResponse.status(400).end();
         })
+})
+
+exports.SetMember = functions.https.onRequest(function (request, response) {
+    var dataUri = 'member/' + request.body.username;
+    var memberData = {
+        name: request.body.username
+    };
+
+    admin.database().ref(dataUri).set(memberData)
+        .then(function (snapshot) {
+            console.log('Successfully saved the user. To = "' + dataUri + '"');
+            console.log(memberData);
+            response.status(200).end();
+        })
+        .catch(function (error) {
+            console.log('Saving the user information failed. To = "' + dataUri + '"');
+            console.log(error);
+            response.status(400).end();
+        });
 })
