@@ -3,7 +3,9 @@ package org.zeropage.apps.zeropage.network.utils;
 import android.support.annotation.NonNull;
 import android.support.v4.util.Pair;
 
+import org.zeropage.apps.zeropage.network.NetworkUrl;
 import org.zeropage.apps.zeropage.network.RequestInfo;
+import org.zeropage.apps.zeropage.network.RequestParameter;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -22,14 +24,20 @@ public class RequestInfoBuilder {
     }
 
     @NonNull
+    public RequestInfoBuilder setBaseUrl(@NonNull NetworkUrl url) {
+        setBaseUrl(url.toString());
+        return this;
+    }
+
+    @NonNull
     public RequestInfoBuilder setAdditionalUrl(@NonNull String additionalUrl) {
         mAdditionalUrl = additionalUrl;
         return this;
     }
 
     @NonNull
-    public RequestInfoBuilder addData(@NonNull String param, @NonNull String arg) {
-        mRequestData.put(param, arg);
+    public RequestInfoBuilder addData(@NonNull RequestParameter param, @NonNull String arg) {
+        mRequestData.put(param.toString(), arg);
         return this;
     }
 
