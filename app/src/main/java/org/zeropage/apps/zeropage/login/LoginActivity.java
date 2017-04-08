@@ -85,7 +85,7 @@ public class LoginActivity extends AppCompatActivity
     private RequestInfo buildLoginRequestInfo() {
         return new RequestInfoBuilder()
                 .setBaseUrl(NetworkUrl.LOGIN)
-                .setAdditionalUrl(mUsernameEditText.getText().toString())
+                .setAdditionalUrl(mUsernameEditText.getText().toString() + '/')
                 .addData(RequestParameter.TOKEN, mTokenEditText.getText().toString())
                 .createInformation();
     }
