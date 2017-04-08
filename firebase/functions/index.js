@@ -12,7 +12,7 @@ expressApp.use(bodyParser.urlencoded({ extended: true }))
 admin.initializeApp(functions.config().firebase)
 
 exports.Authenticate = functions.https.onRequest(function(appRequest, appResponse) {
-    var apiUri = 'http://zerobot.herokuapp.com/hubot/otp/' + appRequest.body.username
+    var apiUri = 'http://zerobot.herokuapp.com/hubot/otp/' + appRequest.body.username + '/'
 
     var options = {
         method: 'POST',
