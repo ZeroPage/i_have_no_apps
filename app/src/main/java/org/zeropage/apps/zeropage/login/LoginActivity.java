@@ -36,9 +36,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
         Fabric.with(this, new Crashlytics());
-        // TODO : Start Slack Application.
 
         initWidget();
+        launchSlackApplication();
         setListenerToButton();
     }
 
@@ -46,6 +46,16 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButton = (Button) findViewById(R.id.login_button);
         mTokenEditText = (EditText) findViewById(R.id.token_edit_text);
         mUsernameEditText = (EditText) findViewById(R.id.username_edit_text);
+    }
+
+    private void launchSlackApplication() {
+        String slackPackageName = "com.Slack";
+        Intent launchIntent = getPackageManager().getLaunchIntentForPackage(slackPackageName);
+        if (launchIntent != null) {
+            startActivity(launchIntent);
+        } else {
+            Log.i(TAG, "There is no slack application.");
+        }
     }
 
     private void setListenerToButton() {
