@@ -9,14 +9,17 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".splash.SplashActivity">
+        </activity>
+        <activity android:name=".guide.GuideActivity" />
+        <activity android:name=".login.LoginActivity">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".guide.GuideActivity" />
-        <activity android:name=".login.LoginActivity" />
+        <activity android:name=".main.MainActivity" />
         <meta-data
             android:name="io.fabric.ApiKey"
             android:value="9107947bd697f13b3f0701d750994aa15e158582" />

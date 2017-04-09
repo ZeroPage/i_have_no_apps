@@ -1,32 +1,30 @@
 package org.zeropage.apps.zeropage.login;
 
+import android.content.Intent;
+import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.android.volley.Response;
-import com.android.volley.VolleyError;
 import com.crashlytics.android.Crashlytics;
 
 import org.zeropage.apps.zeropage.R;
-import org.zeropage.apps.zeropage.network.NetworkQueue;
-import org.zeropage.apps.zeropage.network.NetworkUrl;
-import org.zeropage.apps.zeropage.network.RequestInfo;
-import org.zeropage.apps.zeropage.network.RequestParameter;
-import org.zeropage.apps.zeropage.network.NetworkRequest;
-import org.zeropage.apps.zeropage.network.function.utils.FunctionInfoBuilder;
-import org.zeropage.apps.zeropage.network.function.FunctionType;
-import org.zeropage.apps.zeropage.network.utils.RequestInfoBuilder;
+import org.zeropage.apps.zeropage.main.MainActivity;
+import org.zeropage.apps.zeropage.network.CallbackWrapper;
+import org.zeropage.apps.zeropage.network.function.SignUpRequest;
+import org.zeropage.apps.zeropage.network.login.LoginRequest;
+import org.zeropage.apps.zeropage.utility.Action;
 
 import io.fabric.sdk.android.Fabric;
+import retrofit2.Call;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.scalars.ScalarsConverterFactory;
 
-public class LoginActivity extends AppCompatActivity
-    implements Response.ErrorListener {
-
+public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
 
     private Button mLoginButton;
@@ -51,58 +49,71 @@ public class LoginActivity extends AppCompatActivity
     }
 
     private void setListenerToButton() {
-        mLoginButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                sendLoginRequest();
-            }
-        });
+        mLoginButton.setOnClickListener(v -> sendLoginRequest());
     }
 
     private void sendLoginRequest() {
-        sendRequest(buildLoginRequestInfo(), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                invokeMemberSetFunction();
-            }
-        });
+        LoginRequest request = makeRequest(LoginRequest.BASE_URL, LoginRequest.class);
+        Call<String> queue = request.login(getTextFrom(mUsernameEditText), getTextFrom(mTokenEditText));
+
+        Action onSuccessfulRequest = this::invokeSignUpFunction;
+        Action onFailureRequest = () -> {
+            notifyRequestFailureToUser(R.string.login_error);
+            Log.e(TAG, "Login failed...");
+        };
+
+        CallbackWrapper<String> callbackWrapper = new CallbackWrapper<>(
+                (call, response) -> respondRequestResult(response, onSuccessfulRequest, onFailureRequest),
+                (call, throwable) -> notifyRequestFailureToUser(R.string.network_error));
+
+        queue.enqueue(callbackWrapper.getCallback());
     }
 
-    private void sendRequest(RequestInfo requestInfo, Response.Listener<String> requestListener) {
-        Log.e(TAG, "Request Sending Started, Info :\n" + requestInfo.toString());
-        NetworkRequest networkRequest = new NetworkRequest(requestInfo,
-                requestListener, this);
+    private <T> T makeRequest(String baseUrl, Class<T> requestInfo) {
+        Log.i(TAG, "Making request. BaseUrl = " + baseUrl + ", Class = " + requestInfo.getSimpleName());
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
 
-        NetworkQueue.getInstance(this).addRequestToQueue(networkRequest);
+        return retrofit.create(requestInfo);
     }
 
-    @Override
-    public void onErrorResponse(VolleyError error) {
-        Log.e(TAG, "Error happened while sending request. response code = " + error.networkResponse);
-        Toast.makeText(this, "Error Login!", Toast.LENGTH_SHORT).show();
+    private String getTextFrom(EditText editText) {
+        return editText.getText().toString();
     }
 
-    private RequestInfo buildLoginRequestInfo() {
-        return new RequestInfoBuilder()
-                .setBaseUrl(NetworkUrl.LOGIN)
-                .setAdditionalUrl(mUsernameEditText.getText().toString() + '/')
-                .addData(RequestParameter.TOKEN, mTokenEditText.getText().toString())
-                .createInformation();
+    private void invokeSignUpFunction() {
+        SignUpRequest request = makeRequest(SignUpRequest.BASE_URL, SignUpRequest.class);
+        Call<String> queue = request.execute(getTextFrom(mUsernameEditText));
+
+        Action onSuccessfulRequest = () -> {
+            startActivity(new Intent(this, MainActivity.class));
+            finish();
+        };
+
+        Action onFailureRequest = () -> {
+            notifyRequestFailureToUser(R.string.sign_up_error);
+            Log.e(TAG, "Sign up failed...");
+        };
+
+        CallbackWrapper<String> callbackWrapper = new CallbackWrapper<>(
+                (call, response) -> respondRequestResult(response, onSuccessfulRequest, onFailureRequest),
+                (call, throwable) -> notifyRequestFailureToUser(R.string.network_error));
+
+        queue.enqueue(callbackWrapper.getCallback());
     }
 
-    private void invokeMemberSetFunction() {
-        sendRequest(buildSetMemberFunctionInfo(), new Response.Listener<String>() {
-            @Override
-            public void onResponse(String response) {
-                // TODO : Start MainActivity.
-            }
-        });
+    private void respondRequestResult(Response<String> response, Action onSuccessful, Action onFailure) {
+        if (response.isSuccessful()) {
+            onSuccessful.act();
+        } else {
+            onFailure.act();
+        }
     }
 
-    private RequestInfo buildSetMemberFunctionInfo() {
-        return new FunctionInfoBuilder()
-                .setFunctionType(FunctionType.SET_MEMBER)
-                .addData(RequestParameter.USERNAME, mUsernameEditText.getText().toString())
-                .createInformation();
+    private void notifyRequestFailureToUser(@StringRes int errorMessageId) {
+        Log.e(TAG, "Request failure.");
+        Toast.makeText(this, errorMessageId, Toast.LENGTH_SHORT).show();
     }
 }
