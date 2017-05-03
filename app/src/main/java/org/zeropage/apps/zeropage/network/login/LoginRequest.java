@@ -2,7 +2,7 @@ package org.zeropage.apps.zeropage.network.login;
 
 import android.support.annotation.NonNull;
 
-import org.zeropage.apps.zeropage.network.RequestParameter;
+import org.zeropage.apps.zeropage.network.common.RequestParameter;
 
 import retrofit2.Call;
 import retrofit2.http.Field;

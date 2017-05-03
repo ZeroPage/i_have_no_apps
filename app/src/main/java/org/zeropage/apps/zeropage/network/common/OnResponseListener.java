@@ -1,4 +1,4 @@
-package org.zeropage.apps.zeropage.network;
+package org.zeropage.apps.zeropage.network.common;
 
 import retrofit2.Call;
 import retrofit2.Response;

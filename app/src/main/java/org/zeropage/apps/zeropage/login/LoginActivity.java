@@ -13,7 +13,7 @@ import com.crashlytics.android.Crashlytics;
 
 import org.zeropage.apps.zeropage.R;
 import org.zeropage.apps.zeropage.main.MainActivity;
-import org.zeropage.apps.zeropage.network.CallbackWrapper;
+import org.zeropage.apps.zeropage.network.common.CallbackWrapper;
 import org.zeropage.apps.zeropage.network.function.SignUpRequest;
 import org.zeropage.apps.zeropage.network.login.LoginRequest;
 import org.zeropage.apps.zeropage.utility.Action;
