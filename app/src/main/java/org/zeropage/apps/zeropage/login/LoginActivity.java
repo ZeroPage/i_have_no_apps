@@ -6,8 +6,11 @@ import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -29,6 +32,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button mLoginButton;
     private EditText mTokenEditText;
     private EditText mUsernameEditText;
+    private ProgressBar mLoginProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,6 +49,7 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButton = (Button) findViewById(R.id.login_button);
         mTokenEditText = (EditText) findViewById(R.id.token_edit_text);
         mUsernameEditText = (EditText) findViewById(R.id.username_edit_text);
+        mLoginProgressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
     }
 
     private void launchSlackApplication() {
@@ -67,6 +72,7 @@ public class LoginActivity extends AppCompatActivity {
 
     private void notifyRequestFailureToUser(@StringRes int errorMessageId) {
         Log.e(TAG, "Request failure.");
+        mLoginProgressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(this, errorMessageId, Toast.LENGTH_SHORT).show();
     }
 
@@ -75,14 +81,27 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-    private class LoginTask extends AsyncTask<Void, Void, Void> {
+    private class LoginTask extends AsyncTask<Void, Integer, Void> {
+        @Override
+        protected void onPreExecute() {
+            mLoginProgressBar.setVisibility(View.VISIBLE);
+            mLoginProgressBar.setProgress(0);
+        }
+
         @Override
         protected Void doInBackground(Void... params) {
             sendLoginRequest();
             return null;
         }
 
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            mLoginProgressBar.setProgress(values[0]);
+        }
+
         private void sendLoginRequest() {
+            publishProgress(mLoginProgressBar.getMax() / 3);
+
             RequestSender<LoginRequest> loginSender = new RequestSender<>(LoginRequest.class);
             loginSender.sendRequest(makeCallbackForLogin(), getTextFrom(mUsernameEditText), getTextFrom(mTokenEditText));
         }
@@ -106,6 +125,8 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         private void sendSignUpRequest() {
+            publishProgress((mLoginProgressBar.getMax() / 3) * 2);
+
             RequestSender<SignUpRequest> signUpSender = new RequestSender<>(SignUpRequest.class);
             signUpSender.sendRequest(makeCallbackForSignUp(), getTextFrom(mUsernameEditText), FirebaseInstanceId.getInstance().getToken());
         }
@@ -114,6 +135,7 @@ public class LoginActivity extends AppCompatActivity {
             Action onSuccessfulRequest = () -> {
                 switchToMainActivity();
                 UserInfoPreferences.putUserName(LoginActivity.this, getTextFrom(mUsernameEditText));
+                mLoginProgressBar.setVisibility(View.INVISIBLE);
             };
 
             Action onFailureRequest = () -> notifyRequestFailureToUser(R.string.sign_up_error);
