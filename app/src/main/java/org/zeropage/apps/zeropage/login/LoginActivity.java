@@ -19,6 +19,7 @@ import org.zeropage.apps.zeropage.network.common.RequestSender;
 import org.zeropage.apps.zeropage.network.function.SignUpRequest;
 import org.zeropage.apps.zeropage.network.login.LoginRequest;
 import org.zeropage.apps.zeropage.utility.Action;
+import org.zeropage.apps.zeropage.utility.UserInfoPreferences;
 
 import retrofit2.Response;
 
@@ -110,7 +111,11 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         private CallbackWrapper<String> makeCallbackForSignUp() {
-            Action onSuccessfulRequest = LoginActivity.this::switchToMainActivity;
+            Action onSuccessfulRequest = () -> {
+                switchToMainActivity();
+                UserInfoPreferences.putUserName(LoginActivity.this, getTextFrom(mUsernameEditText));
+            };
+
             Action onFailureRequest = () -> notifyRequestFailureToUser(R.string.sign_up_error);
 
             return new CallbackWrapper<>(
