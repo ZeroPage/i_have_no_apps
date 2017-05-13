@@ -7,8 +7,11 @@ repositories {
     mavenCentral()
 }
 
-
 android {
+    lintOptions {
+        abortOnError false
+    }
+
     signingConfigs {
         release_config {
             /*
@@ -16,15 +19,17 @@ android {
              * 인증서 내용을 미리 스크립트로 작성
              * Github 에 올리기전 패스워드 여부 확인!
              */
-//            keyAlias 'zeropage'
-//            keyPassword '비밀번호 입력 필수'
-//            storeFile file('파일경로 필수')
-//            storePassword '비밀번호 입력 필수'
+            keyAlias 'zeropage'
+            keyPassword '1991zeropage!@#'
+            storeFile file('/Users/gnidoc327/i_have_no_apps/keystore/release.jks')
+            storePassword '1991zeropage!@#'
         }
     }
 
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
+
+    // flavor 에서 사용되는 기본값도 선언
     defaultConfig {
         applicationId "org.zeropage.apps.zeropage"
         minSdkVersion 19
@@ -33,47 +38,40 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //상단 release_config 내용 수정 후 하단 주석 해제할 것
-        //signingConfig signingConfigs.release_config
+        signingConfig signingConfigs.release_config
     }
+
     buildTypes {
         debug {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable true
+            jniDebuggable true
+            renderscriptDebuggable true
         }
         release {
-            minifyEnabled false
+            minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
             debuggable false
-            //상단 release_config 내용 수정 후 하단 주석 해제할 것
-            //signingConfig signingConfigs.release_config
+            signingConfig signingConfigs.release_config
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     productFlavors {
         //Flavor 설정시 어플리케이션ID가 다를 경우, FireBase 콘솔가서 앱 등록을 새로 해줘야함
         mainTestConfig {
-            applicationId 'org.zeropage.apps'
             minSdkVersion 19
             targetSdkVersion 25
             versionCode 1
             versionName "1.0"
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            applicationIdSuffix ".mainTestConfig"
-            versionNameSuffix "-mainTestConfig"
         }
-        logDelConfig {
-            applicationId "org.zeropage.apps"
-            minSdkVersion 19
-            targetSdkVersion 25
-            versionCode 1
-            versionName "1.0"
-            testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-            applicationIdSuffix ".logDelConfig"
-            versionNameSuffix "-logDelConfig"
+        loginConfig {
+            versionNameSuffix '-loginConfig'
         }
     }
 
@@ -105,21 +103,24 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
+    compile 'junit:junit:4.12'
+    androidTestCompile 'com.android.support:support-annotations:25.3.1'
+    androidTestCompile 'com.android.support.test:runner:0.5'
+    androidTestCompile 'com.android.support.test:rules:0.5'
+    androidTestCompile 'com.android.support.test.espresso:espresso-core:2.2.2'
     compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
         transitive = true;
     }
-
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-scalars:2.0.0'
+    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.android.support:appcompat-v7:25.3.1'
     compile 'com.android.support:support-vector-drawable:25.3.1'
     compile 'com.google.firebase:firebase-core:10.2.1'
     compile 'com.google.firebase:firebase-crash:10.2.1'
     compile 'com.google.firebase:firebase-messaging:10.2.1'
     compile 'com.jrummyapps:animated-svg-view:1.0.2'
-    compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.google.android.gms:play-services-auth:10.2.1'
-    androidTestCompile 'junit:junit:4.12'
 }
 
 apply plugin: 'com.google.gms.google-services'

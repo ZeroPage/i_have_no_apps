@@ -12,6 +12,7 @@ import android.widget.Toast;
 import com.crashlytics.android.Crashlytics;
 
 import org.zeropage.apps.zeropage.R;
+import org.zeropage.apps.zeropage.log.ZpLog;
 import org.zeropage.apps.zeropage.main.MainActivity;
 import org.zeropage.apps.zeropage.network.CallbackWrapper;
 import org.zeropage.apps.zeropage.network.function.SignUpRequest;
@@ -46,6 +47,8 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButton = (Button) findViewById(R.id.login_button);
         mTokenEditText = (EditText) findViewById(R.id.token_edit_text);
         mUsernameEditText = (EditText) findViewById(R.id.username_edit_text);
+
+        ZpLog.i("123", "Start App");
     }
 
     private void launchSlackApplication() {
@@ -54,7 +57,7 @@ public class LoginActivity extends AppCompatActivity {
         if (launchIntent != null) {
             startActivity(launchIntent);
         } else {
-            Log.i(TAG, "There is no slack application.");
+            ZpLog.i(TAG, "There is no slack application.");
         }
     }
 
@@ -69,7 +72,7 @@ public class LoginActivity extends AppCompatActivity {
         Action onSuccessfulRequest = this::invokeSignUpFunction;
         Action onFailureRequest = () -> {
             notifyRequestFailureToUser(R.string.login_error);
-            Log.e(TAG, "Login failed...");
+            ZpLog.e(TAG, "Login failed...");
         };
 
         CallbackWrapper<String> callbackWrapper = new CallbackWrapper<>(
@@ -80,7 +83,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private <T> T makeRequest(String baseUrl, Class<T> requestInfo) {
-        Log.i(TAG, "Making request. BaseUrl = " + baseUrl + ", Class = " + requestInfo.getSimpleName());
+        ZpLog.i(TAG, "Making request. BaseUrl = " + baseUrl + ", Class = " + requestInfo.getSimpleName());
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl(baseUrl)
                 .addConverterFactory(ScalarsConverterFactory.create())
@@ -104,7 +107,7 @@ public class LoginActivity extends AppCompatActivity {
 
         Action onFailureRequest = () -> {
             notifyRequestFailureToUser(R.string.sign_up_error);
-            Log.e(TAG, "Sign up failed...");
+            ZpLog.e(TAG, "Sign up failed...");
         };
 
         CallbackWrapper<String> callbackWrapper = new CallbackWrapper<>(
@@ -123,7 +126,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void notifyRequestFailureToUser(@StringRes int errorMessageId) {
-        Log.e(TAG, "Request failure.");
+        ZpLog.e(TAG, "Request failure.");
         Toast.makeText(this, errorMessageId, Toast.LENGTH_SHORT).show();
     }
 }
