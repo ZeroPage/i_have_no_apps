@@ -25,15 +25,11 @@ public class StateMonitor {
         networkState = NetStates.Disconnect;
     }
 
-    public boolean NetworkIsEnable(){
-        return false;
+    public boolean networkIsConnected() {
+        return networkState == NetStates.Connected;
     }
 
-    public void setNetworkState(NetStates changedState){
+    public void setNetworkState(NetStates changedState) {
         networkState = changedState;
-    }
-
-    public NetStates getNetworkState(){
-        return networkState;
     }
 }

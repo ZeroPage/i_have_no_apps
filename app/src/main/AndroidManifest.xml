@@ -38,5 +38,11 @@
             </intent-filter>
         </service>
 
+        <service android:name=".service.StateManager">
+            <intent-filter>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
+            </intent-filter>
+        </service>
+
     </application>
 </manifest>
