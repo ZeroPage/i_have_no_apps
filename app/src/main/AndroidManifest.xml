@@ -11,9 +11,12 @@
         android:theme="@style/AppTheme">
         <activity android:name=".splash.SplashActivity">
         </activity>
-        <activity android:name=".guide.GuideActivity" />
+        <activity android:name=".guide.GuideActivity" >
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN"/>
+            </intent-filter>
+        </activity>
         <activity android:name=".login.LoginActivity">
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
