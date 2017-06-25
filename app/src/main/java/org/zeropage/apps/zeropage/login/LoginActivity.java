@@ -1,24 +1,29 @@
 package org.zeropage.apps.zeropage.login;
 
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
-import com.crashlytics.android.Crashlytics;
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.zeropage.apps.zeropage.R;
 import org.zeropage.apps.zeropage.log.ZpLog;
 import org.zeropage.apps.zeropage.main.MainActivity;
-import org.zeropage.apps.zeropage.network.CallbackWrapper;
+import org.zeropage.apps.zeropage.network.common.CallbackWrapper;
+import org.zeropage.apps.zeropage.network.common.RequestSender;
 import org.zeropage.apps.zeropage.network.function.SignUpRequest;
 import org.zeropage.apps.zeropage.network.login.LoginRequest;
 import org.zeropage.apps.zeropage.utility.Action;
+import org.zeropage.apps.zeropage.utility.UserInfoPreferences;
 
-import io.fabric.sdk.android.Fabric;
 import retrofit2.Call;
 import retrofit2.Response;
 import retrofit2.Retrofit;
@@ -30,12 +35,13 @@ public class LoginActivity extends AppCompatActivity {
     private Button mLoginButton;
     private EditText mTokenEditText;
     private EditText mUsernameEditText;
+    private ProgressBar mLoginProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        Fabric.with(this, new Crashlytics());
+        // Fabric.with(this, new Crashlytics());
 
         initWidget();
         launchSlackApplication();
@@ -46,6 +52,7 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButton = (Button) findViewById(R.id.login_button);
         mTokenEditText = (EditText) findViewById(R.id.token_edit_text);
         mUsernameEditText = (EditText) findViewById(R.id.username_edit_text);
+        mLoginProgressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
     }
 
     private void launchSlackApplication() {
@@ -59,71 +66,103 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void setListenerToButton() {
-        mLoginButton.setOnClickListener(v -> sendLoginRequest());
+        mLoginButton.setOnClickListener(v -> new LoginTask().execute());
     }
 
-    private void sendLoginRequest() {
-        LoginRequest request = makeRequest(LoginRequest.BASE_URL, LoginRequest.class);
-        Call<String> queue = request.login(getTextFrom(mUsernameEditText), getTextFrom(mTokenEditText));
 
-        Action onSuccessfulRequest = this::invokeSignUpFunction;
-        Action onFailureRequest = () -> {
-            notifyRequestFailureToUser(R.string.login_error);
-            ZpLog.e(TAG, "Login failed...");
-        };
 
-        CallbackWrapper<String> callbackWrapper = new CallbackWrapper<>(
-                (call, response) -> respondRequestResult(response, onSuccessfulRequest, onFailureRequest),
-                (call, throwable) -> notifyRequestFailureToUser(R.string.network_error));
-
-        queue.enqueue(callbackWrapper.getCallback());
-    }
-
-    private <T> T makeRequest(String baseUrl, Class<T> requestInfo) {
-        ZpLog.i(TAG, "Making request. BaseUrl = " + baseUrl + ", Class = " + requestInfo.getSimpleName());
-        Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl(baseUrl)
-                .addConverterFactory(ScalarsConverterFactory.create())
-                .build();
-
-        return retrofit.create(requestInfo);
-    }
 
     private String getTextFrom(EditText editText) {
         return editText.getText().toString();
     }
 
-    private void invokeSignUpFunction() {
-        SignUpRequest request = makeRequest(SignUpRequest.BASE_URL, SignUpRequest.class);
-        Call<String> queue = request.execute(getTextFrom(mUsernameEditText));
 
-        Action onSuccessfulRequest = () -> {
-            startActivity(new Intent(this, MainActivity.class));
-            finish();
-        };
+    private void notifyRequestFailureToUser(@StringRes int errorMessageId) {
+        Log.e(TAG, "Request failure.");
+        mLoginProgressBar.setVisibility(View.INVISIBLE);
+        Toast.makeText(this, errorMessageId, Toast.LENGTH_SHORT).show();
+    }
+
+    private void switchToMainActivity() {
+        startActivity(new Intent(this, MainActivity.class));
+        finish();
+    }
+
+
+    class LoginTask extends AsyncTask<Void, Integer, Void> {
+        @Override
+        protected void onPreExecute() {
+            mLoginProgressBar.setVisibility(View.VISIBLE);
+            mLoginProgressBar.setProgress(0);
+        }
+
+        @Override
+        protected Void doInBackground(Void... params) {
+            sendLoginRequest();
+            return null;
+        }
+
+        @Override
+        protected void onProgressUpdate(Integer... values) {
+            mLoginProgressBar.setProgress(values[0]);
+        }
+
+        private void sendLoginRequest() {
+            publishProgress(mLoginProgressBar.getMax() / 3);
+
+            RequestSender<LoginRequest> loginSender = new RequestSender<>(LoginRequest.class);
+            loginSender.sendRequest(makeCallbackForLogin(), getTextFrom(mUsernameEditText), getTextFrom(mTokenEditText));
+        }
+
 
         Action onFailureRequest = () -> {
             notifyRequestFailureToUser(R.string.sign_up_error);
             ZpLog.e(TAG, "Sign up failed...");
         };
 
-        CallbackWrapper<String> callbackWrapper = new CallbackWrapper<>(
-                (call, response) -> respondRequestResult(response, onSuccessfulRequest, onFailureRequest),
-                (call, throwable) -> notifyRequestFailureToUser(R.string.network_error));
+        private CallbackWrapper<String> makeCallbackForLogin() {
+            Action onSuccessfulRequest = this::sendSignUpRequest;
+            Action onFailureRequest = () -> notifyRequestFailureToUser(R.string.login_error);
 
-        queue.enqueue(callbackWrapper.getCallback());
-    }
-
-    private void respondRequestResult(Response<String> response, Action onSuccessful, Action onFailure) {
-        if (response.isSuccessful()) {
-            onSuccessful.act();
-        } else {
-            onFailure.act();
+            return new CallbackWrapper<>(
+                    (call, response) -> respondRequestResult(response, onSuccessfulRequest, onFailureRequest),
+                    (call, throwable) -> notifyRequestFailureToUser(R.string.network_error)
+            );
         }
-    }
 
-    private void notifyRequestFailureToUser(@StringRes int errorMessageId) {
-        ZpLog.e(TAG, "Request failure.");
-        Toast.makeText(this, errorMessageId, Toast.LENGTH_SHORT).show();
+        private void respondRequestResult(Response<String> response, Action onSuccessful, Action onFailure) {
+            if (response.isSuccessful()) {
+                onSuccessful.act();
+            } else {
+                onFailure.act();
+            }
+        }
+
+        private void sendSignUpRequest() {
+            publishProgress((mLoginProgressBar.getMax() / 3) * 2);
+
+            RequestSender<SignUpRequest> signUpSender = new RequestSender<>(SignUpRequest.class);
+            signUpSender.sendRequest(makeCallbackForSignUp(), getTextFrom(mUsernameEditText), FirebaseInstanceId.getInstance().getToken());
+        }
+
+        private void notifyRequestFailureToUser(@StringRes int errorMessageId) {
+            ZpLog.e(TAG, "Request failure.");
+            Toast.makeText(getApplicationContext(), errorMessageId, Toast.LENGTH_SHORT).show();
+        }
+
+        private CallbackWrapper<String> makeCallbackForSignUp () {
+            Action onSuccessfulRequest = () -> {
+                switchToMainActivity();
+                UserInfoPreferences.putUserName(LoginActivity.this, getTextFrom(mUsernameEditText));
+                mLoginProgressBar.setVisibility(View.INVISIBLE);
+            };
+
+            Action onFailureRequest = () -> notifyRequestFailureToUser(R.string.sign_up_error);
+
+            return new CallbackWrapper<>(
+                    (call, response) -> respondRequestResult(response, onSuccessfulRequest, onFailureRequest),
+                    (call, throwable) -> notifyRequestFailureToUser(R.string.network_error)
+            );
+        }
     }
 }

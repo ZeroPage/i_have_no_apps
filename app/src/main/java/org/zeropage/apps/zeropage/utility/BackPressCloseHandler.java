@@ -1,4 +1,5 @@
-package org.zeropage.apps.zeropage.main;
+package org.zeropage.apps.zeropage.utility;
+
 
 import android.app.Activity;
 import android.widget.Toast;
@@ -19,7 +20,8 @@ public class BackPressCloseHandler {
     public void onBackPressed(){
         if(System.currentTimeMillis() > backKeyPressedTime + 2000){ // 2초가 적당하다니까
             backKeyPressedTime = System.currentTimeMillis();
-            Toast.makeText(activity, "\'뒤로\' 버튼을 한번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT).show();
+            Toast.makeText(activity, "한번 더 누르시면 종료됩니다", Toast.LENGTH_SHORT).show();
+            return ;
         }
         else if(System.currentTimeMillis() <= backKeyPressedTime + 2000){
             activity.finish();
