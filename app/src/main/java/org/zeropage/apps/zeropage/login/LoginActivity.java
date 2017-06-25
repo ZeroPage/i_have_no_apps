@@ -69,16 +69,12 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButton.setOnClickListener(v -> new LoginTask().execute());
     }
 
-
-
-
     private String getTextFrom(EditText editText) {
         return editText.getText().toString();
     }
 
-
     private void notifyRequestFailureToUser(@StringRes int errorMessageId) {
-        Log.e(TAG, "Request failure.");
+        ZpLog.e(TAG, "Request failure.");
         mLoginProgressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(this, errorMessageId, Toast.LENGTH_SHORT).show();
     }
@@ -88,8 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         finish();
     }
 
-
-    class LoginTask extends AsyncTask<Void, Integer, Void> {
+    private class LoginTask extends AsyncTask<Void, Integer, Void> {
         @Override
         protected void onPreExecute() {
             mLoginProgressBar.setVisibility(View.VISIBLE);
@@ -113,7 +108,6 @@ public class LoginActivity extends AppCompatActivity {
             RequestSender<LoginRequest> loginSender = new RequestSender<>(LoginRequest.class);
             loginSender.sendRequest(makeCallbackForLogin(), getTextFrom(mUsernameEditText), getTextFrom(mTokenEditText));
         }
-
 
         Action onFailureRequest = () -> {
             notifyRequestFailureToUser(R.string.sign_up_error);
@@ -145,12 +139,13 @@ public class LoginActivity extends AppCompatActivity {
             signUpSender.sendRequest(makeCallbackForSignUp(), getTextFrom(mUsernameEditText), FirebaseInstanceId.getInstance().getToken());
         }
 
+
         private void notifyRequestFailureToUser(@StringRes int errorMessageId) {
             ZpLog.e(TAG, "Request failure.");
             Toast.makeText(getApplicationContext(), errorMessageId, Toast.LENGTH_SHORT).show();
         }
 
-        private CallbackWrapper<String> makeCallbackForSignUp () {
+        private CallbackWrapper<String> makeCallbackForSignUp() {
             Action onSuccessfulRequest = () -> {
                 switchToMainActivity();
                 UserInfoPreferences.putUserName(LoginActivity.this, getTextFrom(mUsernameEditText));
