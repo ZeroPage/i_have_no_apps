@@ -16,7 +16,7 @@
             android:layout_height="400dp"
             android:layout_centerHorizontal="true"
             android:layout_margin="6dp"
-            app:srcCompat="@drawable/menu" />
+            app:srcCompat="@drawable/login_error" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,6 +26,7 @@
             android:layout_margin="6dp"
             android:textSize="16sp"
             android:textColor="#EEEEEE"
-            android:text="Zeropage Slack을 실행시켜\n좌측 상단의 메뉴 클릭" />
+            android:text="30초 이내에 못할 경우 실패!\n다시 도전하세요! ㅎㅎ" />
     </RelativeLayout>
+
 </FrameLayout>

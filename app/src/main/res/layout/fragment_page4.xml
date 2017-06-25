@@ -16,9 +16,10 @@
             android:layout_height="400dp"
             android:layout_centerHorizontal="true"
             android:layout_margin="6dp"
-            app:srcCompat="@drawable/menu" />
+            app:srcCompat="@drawable/get_otp" />
 
         <TextView
+            android:id="@+id/test"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/ImageView"
@@ -26,6 +27,7 @@
             android:layout_margin="6dp"
             android:textSize="16sp"
             android:textColor="#EEEEEE"
-            android:text="Zeropage Slack을 실행시켜\n좌측 상단의 메뉴 클릭" />
+            android:text="zerobot 채팅창에 otp를 입력\nzerobot otp를 복사" />
     </RelativeLayout>
+
 </FrameLayout>

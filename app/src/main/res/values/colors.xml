@@ -10,4 +10,8 @@
     <color name="google_blue">#4285F4</color>
     <color name="google_green">#34A853</color>
 
+    <!-- Floating Action Button(FAB) -->
+    <color name="fab_primary">#45A1F5</color>
+    <color name="fab_pressed">#6EB5F7</color>
+    <color name="fab_ripple">#AED6FC</color>
 </resources>

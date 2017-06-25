@@ -1,12 +1,41 @@
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/background_color">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="PAGE 1" />
+        android:layout_margin="16dp">
+        <ImageView
+            android:id="@+id/ImageView"
+            android:layout_width="250dp"
+            android:layout_height="250dp"
+            android:layout_centerInParent="true"
+            app:srcCompat="@drawable/zp_logo" />
 
+        <TextView
+            android:id="@+id/text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/ImageView"
+            android:layout_centerHorizontal="true"
+            android:textSize="20sp"
+            android:textColor="#EEEEEE"
+            android:layout_margin="6dp"
+            android:text="가이드 페이지" />
+        <TextView
+            android:id="@+id/sub_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/text"
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:textColor="#DDDDDD"
+            android:layout_margin="6dp"
+            android:text="불만 있음 니가 만들던가!" />
+    </RelativeLayout>
 </FrameLayout>

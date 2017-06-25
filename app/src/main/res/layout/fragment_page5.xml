@@ -14,9 +14,9 @@
             android:id="@+id/ImageView"
             android:layout_width="250dp"
             android:layout_height="400dp"
-            android:layout_centerHorizontal="true"
             android:layout_margin="6dp"
-            app:srcCompat="@drawable/menu" />
+            android:layout_centerHorizontal="true"
+            app:srcCompat="@drawable/otp_enter" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -26,6 +26,7 @@
             android:layout_margin="6dp"
             android:textSize="16sp"
             android:textColor="#EEEEEE"
-            android:text="Zeropage Slack을 실행시켜\n좌측 상단의 메뉴 클릭" />
+            android:text="복사한 OTP를 Token에 입력 후\nSlack 유저이름 입력" />
     </RelativeLayout>
+
 </FrameLayout>

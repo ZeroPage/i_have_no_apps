@@ -2,7 +2,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/background_color">
 
     <!-- TODO: Update blank fragment layout -->
@@ -10,22 +9,24 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_margin="16dp">
-        <ImageView
-            android:id="@+id/ImageView"
-            android:layout_width="250dp"
-            android:layout_height="400dp"
-            android:layout_centerHorizontal="true"
-            android:layout_margin="6dp"
-            app:srcCompat="@drawable/menu" />
-
         <TextView
+            android:id="@+id/intro_login_text"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/ImageView"
-            android:layout_centerHorizontal="true"
+            android:layout_centerInParent="true"
             android:layout_margin="6dp"
-            android:textSize="16sp"
+            android:textSize="20sp"
             android:textColor="#EEEEEE"
-            android:text="Zeropage Slack을 실행시켜\n좌측 상단의 메뉴 클릭" />
+            android:text="로그인하기" />
+
+        <Button
+            android:id="@+id/go_to_login_page"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_margin="6dp"
+            android:layout_below="@+id/intro_login_text"
+            android:layout_centerHorizontal="true"
+            android:text="Login" />
     </RelativeLayout>
+
 </FrameLayout>

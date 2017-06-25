@@ -1,15 +1,8 @@
 package org.zeropage.apps.zeropage.guide;
 
-import android.content.Context;
-import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.util.AttributeSet;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.ViewGroup;
 
 import java.util.ArrayList;
 
@@ -20,7 +13,7 @@ import org.zeropage.apps.zeropage.R;
  */
 
 public class GuideAdapter extends FragmentPagerAdapter {
-    static final int GUIDE_PAGES = 3;
+    static final int GUIDE_PAGES = 7;
     ArrayList<Fragment> arrayList = new ArrayList<>();
 
     public GuideAdapter(FragmentManager fm) {
@@ -34,6 +27,18 @@ public class GuideAdapter extends FragmentPagerAdapter {
         Page third = new Page();
         third.setPage(R.layout.fragment_page3);
         arrayList.add(third);
+        Page fourth = new Page();
+        fourth.setPage(R.layout.fragment_page4);
+        arrayList.add(fourth);
+        Page fifth = new Page();
+        fifth.setPage(R.layout.fragment_page5);
+        arrayList.add(fifth);
+        Page sixth = new Page();
+        sixth.setPage(R.layout.fragment_page6);
+        arrayList.add(sixth);
+        Page seventh = new Page();
+        seventh.setPage(R.layout.fragment_page7);
+        arrayList.add(seventh);
     }
 
     @Override
