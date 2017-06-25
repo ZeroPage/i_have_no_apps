@@ -18,7 +18,7 @@ class NotificationOpenHelper extends SQLiteOpenHelper {
                 " _id integer primary key autoincrement, " +
                 NotificationTable.Column.DATE + ", " +
                 NotificationTable.Column.TITLE + ", " +
-                NotificationTable.Column.BODY + ", " +
+                NotificationTable.Column.BODY +
                 ")"
         );
     }
