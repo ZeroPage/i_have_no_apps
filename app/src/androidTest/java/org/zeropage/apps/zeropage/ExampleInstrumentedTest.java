@@ -1,12 +1,11 @@
 package org.zeropage.apps.zeropage;
 
 import android.content.Context;
-import android.support.test.InstrumentationRegistry;
-import android.support.test.runner.AndroidJUnit4;
 
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
+import static junit.framework.Assert.assertEquals;
 import static org.junit.Assert.*;
 
 /**
@@ -14,6 +13,7 @@ import static org.junit.Assert.*;
  *
  * @see <a href="http://d.android.com/tools/testing">Testing documentation</a>
  */
+/*
 @RunWith(AndroidJUnit4.class)
 public class ExampleInstrumentedTest {
     @Test
@@ -23,4 +23,4 @@ public class ExampleInstrumentedTest {
 
         assertEquals("org.zeropage.apps.zeropage", appContext.getPackageName());
     }
-}
+}*/

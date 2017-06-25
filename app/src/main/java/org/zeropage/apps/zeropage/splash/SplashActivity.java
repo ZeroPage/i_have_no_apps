@@ -23,13 +23,10 @@ public class SplashActivity extends Activity {
         svgView.start();
 
         Handler handler = new Handler();
-        /*handler.postDelayed(new Runnable() {
-            @Override
-            public void run() {
-                startActivity(new Intent(SplashActivity.this, GuideActivity.class));
-                finish();
-            }
-        }, 2*1000);*/
+        handler.postDelayed(() -> {
+            startActivity(new Intent(SplashActivity.this, GuideActivity.class));
+            finish();
+        }, 2*1000);
 
         //crash report 테스트
         //FirebaseCrash.report(new Exception("My first Android non-fatal error"));
