@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -47,8 +46,6 @@ public class LoginActivity extends AppCompatActivity {
         mLoginButton = (Button) findViewById(R.id.login_button);
         mTokenEditText = (EditText) findViewById(R.id.token_edit_text);
         mUsernameEditText = (EditText) findViewById(R.id.username_edit_text);
-
-        ZpLog.i("123", "Start App");
     }
 
     private void launchSlackApplication() {

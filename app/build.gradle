@@ -15,7 +15,7 @@ android {
     afterEvaluate { project ->
         def keystorePropertiesFile = rootProject.file("certification/keystore.properties");
 
-        if(keystorePropertiesFile.exists()){
+        if (keystorePropertiesFile.exists()) {
             def keystoreProperties = new Properties()
             keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
             signingConfigs.release_config.storeFile = file(keystoreProperties.getProperty("storeFile"))
@@ -95,13 +95,16 @@ android {
      */
     applicationVariants.all { variant ->
         variant.outputs.each { output ->
-            def date = new Date();
-            def formatDate = date.format("yyMMdd")
-            def formatTime = date.format("HHmmss")
-            def file = output.outputFile
-            output.outputFile = new File(file.parent,
-                    variant.getFlavorName() + "_" + variant.getBuildType().getName()
-                            + "_" + formatDate + "_" + formatTime + ".apk")
+            if (variant.getBuildType().getName() != "debug") {
+                def date = new Date();
+                def formatDate = date.format("yyMMdd")
+                def formatTime = date.format("HHmmss")
+                def file = output.outputFile
+
+                output.outputFile = new File(file.parent,
+                        variant.getFlavorName() + "_" + variant.getBuildType().getName()
+                                + "_" + formatDate + "_" + formatTime + ".apk")
+            }
         }
     }
 }
@@ -111,8 +114,6 @@ android {
  */
 dependencies {
     compile fileTree(include: ['*.jar'], dir: 'libs')
-    androidTestCompile 'junit:junit:4.12'
-    androidTestCompile 'com.android.support:support-annotations:25.3.1'
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
@@ -131,6 +132,9 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.2.1'
     compile 'com.jrummyapps:animated-svg-view:1.0.2'
     compile 'com.google.android.gms:play-services-auth:10.2.1'
+    compile 'com.android.support:design:25.3.1'
+    androidTestCompile 'junit:junit:4.12'
+    androidTestCompile 'com.android.support:support-annotations:25.3.1'
 }
 
 apply plugin: 'com.google.gms.google-services'
