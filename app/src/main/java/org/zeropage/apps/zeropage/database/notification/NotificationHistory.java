@@ -14,8 +14,12 @@ public class NotificationHistory {
     private static NotificationHistory sInstance;
     private SQLiteDatabase mDatabase;
 
-    public NotificationHistory getInstance(Context context) {
-        sInstance = new Notifi
+    public synchronized static NotificationHistory getInstance(Context context) {
+        if (sInstance == null) {
+            sInstance = new NotificationHistory(context.getApplicationContext());
+        }
+
+        return sInstance;
     }
 
     private NotificationHistory(Context context) {
