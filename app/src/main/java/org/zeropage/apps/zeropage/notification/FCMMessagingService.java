@@ -18,21 +18,22 @@ public class FCMMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        sendNotification(remoteMessage.getNotification().getBody());
+        sendNotification(remoteMessage.getNotification().getTitle(),
+                         remoteMessage.getNotification().getBody());
     }
 
-    private void sendNotification(String messageBody) {
+    private void sendNotification(String title, String messageBody) {
         Intent intent = new Intent(this, LoginActivity.class);
         intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent, PendingIntent.FLAG_ONE_SHOT);
 
-        Uri defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION);
+        PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, intent,
+                PendingIntent.FLAG_UPDATE_CURRENT | PendingIntent.FLAG_ONE_SHOT);
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(this)
-                .setContentTitle(getString(R.string.login_error))
+                .setContentTitle(title)
                 .setContentText(messageBody)
                 .setAutoCancel(true)
                 .setSmallIcon(R.mipmap.zp_logo)
-                .setSound(defaultSoundUri)
                 .setContentIntent(pendingIntent);
 
         NotificationManager notificationManager = (NotificationManager)

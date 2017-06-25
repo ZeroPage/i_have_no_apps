@@ -52,5 +52,6 @@ dependencies {
     compile 'com.google.firebase:firebase-messaging:10.0.1'
     compile 'com.jrummyapps:animated-svg-view:1.0.2'
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
+    compile 'com.annimon:stream:1.0.1'
     testCompile 'junit:junit:4.12'
 }

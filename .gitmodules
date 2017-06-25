@@ -1,0 +1,3 @@
+[submodule "i_have_no_apps_server"]
+	path = i_have_no_apps_server
+	url = https://github.com/ZeroPage/i_have_no_apps_server
