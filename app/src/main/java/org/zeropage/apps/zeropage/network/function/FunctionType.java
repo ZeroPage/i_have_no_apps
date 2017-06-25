@@ -3,6 +3,6 @@ package org.zeropage.apps.zeropage.network.function;
 import android.support.annotation.NonNull;
 
 public interface FunctionType {
-    String AUTHENTICATE ="Authenticate";
+    String INFORMATION = "GetMemberInfo";
     String SIGN_UP = "SetMember";
 }
