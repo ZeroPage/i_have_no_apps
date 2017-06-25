@@ -14,7 +14,6 @@ public class ViewPagerAdapter extends FragmentPagerAdapter {
     public static final int MAX_PAGE = 3;
     private ArrayList<WebViewFragment> arrayList;
 
-
     public ViewPagerAdapter(FragmentManager fm) {
         super(fm);
 
