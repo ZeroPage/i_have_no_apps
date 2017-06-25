@@ -10,12 +10,12 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.zeropage.apps.zeropage.R;
+import org.zeropage.apps.zeropage.log.ZpLog;
 import org.zeropage.apps.zeropage.main.MainActivity;
 import org.zeropage.apps.zeropage.network.common.CallbackWrapper;
 import org.zeropage.apps.zeropage.network.common.RequestSender;
@@ -58,7 +58,7 @@ public class LoginActivity extends AppCompatActivity {
         if (launchIntent != null) {
             startActivity(launchIntent);
         } else {
-            Log.i(TAG, "There is no slack application.");
+            ZpLog.i(TAG, "There is no slack application.");
         }
     }
 
@@ -71,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void notifyRequestFailureToUser(@StringRes int errorMessageId) {
-        Log.e(TAG, "Request failure.");
+        ZpLog.e(TAG, "Request failure.");
         mLoginProgressBar.setVisibility(View.INVISIBLE);
         Toast.makeText(this, errorMessageId, Toast.LENGTH_SHORT).show();
     }

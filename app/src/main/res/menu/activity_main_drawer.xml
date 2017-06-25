@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:title="동아리정보">
+        <menu>
+            <item
+                android:id="@+id/menu_intro"
+                android:icon="@drawable/ic_help_outline_black_24dp"
+                android:title="동아리소개" />
+            <item
+                android:id="@+id/menu_rule"
+                android:icon="@drawable/ic_list_black_24dp"
+                android:title="동아리회칙" />
+            <item
+                android:id="@+id/menu_push"
+                android:icon="@drawable/ic_mail_black_24dp"
+                android:title="푸시알람" />
+        </menu>
+    </item>
+</menu>
