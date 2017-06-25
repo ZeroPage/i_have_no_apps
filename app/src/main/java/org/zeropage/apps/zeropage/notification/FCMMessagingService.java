@@ -12,14 +12,23 @@ import com.google.firebase.messaging.FirebaseMessagingService;
 import com.google.firebase.messaging.RemoteMessage;
 
 import org.zeropage.apps.zeropage.R;
+import org.zeropage.apps.zeropage.database.notification.NotificationHistory;
+import org.zeropage.apps.zeropage.log.ZpLog;
 import org.zeropage.apps.zeropage.login.LoginActivity;
+
+import java.util.Date;
 
 public class FCMMessagingService extends FirebaseMessagingService {
 
     @Override
     public void onMessageReceived(RemoteMessage remoteMessage) {
-        sendNotification(remoteMessage.getNotification().getTitle(),
-                         remoteMessage.getNotification().getBody());
+        String title = remoteMessage.getNotification().getTitle();
+        String body = remoteMessage.getNotification().getBody();
+
+        sendNotification(title, body);
+
+        NotificationHistory history = NotificationHistory.getInstance(getApplicationContext());
+        history.addToHistory(new Notification(new Date(System.currentTimeMillis()), title, body));
     }
 
     private void sendNotification(String title, String messageBody) {
