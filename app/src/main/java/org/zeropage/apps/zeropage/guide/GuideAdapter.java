@@ -42,8 +42,7 @@ public class GuideAdapter extends FragmentPagerAdapter {
         sixth.setPage(R.layout.fragment_page6);
         sixth.setImg(R.drawable.login_error);
         arrayList.add(sixth);
-        Page seventh = new Page();
-        seventh.setPage(R.layout.fragment_last_page);
+        LastPage seventh = new LastPage();
         arrayList.add(seventh);
     }
 

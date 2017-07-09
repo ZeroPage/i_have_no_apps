@@ -15,8 +15,7 @@
             android:layout_width="250dp"
             android:layout_height="400dp"
             android:layout_centerHorizontal="true"
-            android:layout_margin="6dp"
-            app:srcCompat="@drawable/get_otp" />
+            android:layout_margin="6dp"/>
 
         <TextView
             android:id="@+id/test"

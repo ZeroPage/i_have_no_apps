@@ -14,8 +14,7 @@
             android:id="@+id/ImageView"
             android:layout_width="250dp"
             android:layout_height="250dp"
-            android:layout_centerInParent="true"
-            app:srcCompat="@drawable/zp_logo" />
+            android:layout_centerInParent="true" />
 
         <TextView
             android:id="@+id/text"

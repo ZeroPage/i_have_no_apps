@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.crashlytics.android.Crashlytics;
+import com.google.firebase.crash.FirebaseCrash;
 import com.jrummyapps.android.widget.AnimatedSvgView;
 
 import io.fabric.sdk.android.Fabric;
@@ -29,6 +30,6 @@ public class SplashActivity extends Activity {
         }, 2*1000);
 
         //crash report 테스트
-        //FirebaseCrash.report(new Exception("My first Android non-fatal error"));
+//        FirebaseCrash.report(new Exception("My first Android non-fatal error"));
     }
 }
