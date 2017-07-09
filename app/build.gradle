@@ -12,19 +12,6 @@ android {
     compileSdkVersion 25
     buildToolsVersion "25.0.2"
 
-    afterEvaluate { project ->
-        def keystorePropertiesFile = rootProject.file("certification/keystore.properties");
-
-        if (keystorePropertiesFile.exists()) {
-            def keystoreProperties = new Properties()
-            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
-            signingConfigs.release_config.storeFile = file(keystoreProperties.getProperty("storeFile"))
-            signingConfigs.release_config.storePassword = keystoreProperties.getProperty("storePassword")
-            signingConfigs.release_config.keyAlias = keystoreProperties.getProperty("keyAlias")
-            signingConfigs.release_config.keyPassword = keystoreProperties.getProperty("keyPassword")
-        }
-    }
-
     signingConfigs {
         release_config {
             /*
@@ -40,13 +27,26 @@ android {
         }
     }
 
+    afterEvaluate { project ->
+        def keystorePropertiesFile = rootProject.file("certification/keystore.properties");
+
+        if (keystorePropertiesFile.exists()) {
+            def keystoreProperties = new Properties()
+            keystoreProperties.load(new FileInputStream(keystorePropertiesFile))
+            signingConfigs.release_config.storeFile = file(keystoreProperties.getProperty("storeFile"))
+            signingConfigs.release_config.storePassword = keystoreProperties.getProperty("storePassword")
+            signingConfigs.release_config.keyAlias = keystoreProperties.getProperty("keyAlias")
+            signingConfigs.release_config.keyPassword = keystoreProperties.getProperty("keyPassword")
+        }
+    }
+
     // flavor 에서 사용되는 기본값도 선언
     defaultConfig {
         applicationId "org.zeropage.apps.zeropage"
         minSdkVersion 19
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "0.1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         //상단 release_config 내용 수정 후 하단 주석 해제할 것
         signingConfig signingConfigs.release_config
@@ -78,8 +78,8 @@ android {
         mainTestConfig {
             minSdkVersion 19
             targetSdkVersion 25
-            versionCode 1
-            versionName "1.0"
+            versionCode 2
+            versionName "0.1.0"
         }
         loginConfig {
             versionNameSuffix '-loginConfig'
@@ -117,15 +117,12 @@ dependencies {
     androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
         exclude group: 'com.android.support', module: 'support-annotations'
     })
-
     compile('com.crashlytics.sdk.android:crashlytics:2.6.7@aar') {
         transitive = true;
     }
-
     // Glide 추가
     compile 'com.github.bumptech.glide:glide:4.0.0-RC1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.0.0-RC1'
-
     compile 'com.android.support.constraint:constraint-layout:1.0.2'
     compile 'com.squareup.retrofit2:retrofit:2.2.0'
     compile 'com.squareup.retrofit2:converter-scalars:2.0.0'
@@ -140,10 +137,8 @@ dependencies {
     compile 'com.annimon:stream:1.0.1'
     compile 'com.android.support:support-v4:25.3.1'
     compile 'com.melnykov:floatingactionbutton:1.3.0'
-
     androidTestCompile 'junit:junit:4.12'
     androidTestCompile 'com.android.support:support-annotations:25.3.1'
-
     testCompile 'junit:junit:4.12'
 }
 
