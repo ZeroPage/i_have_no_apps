@@ -19,8 +19,8 @@ public class SplashActivity extends Activity {
         Fabric.with(this, new Crashlytics());
         setContentView(R.layout.activity_splash);
 
-        AnimatedSvgView svgView = (AnimatedSvgView) findViewById(R.id.animated_svg_view);
-        svgView.start();
+//        AnimatedSvgView svgView = (AnimatedSvgView) findViewById(R.id.animated_svg_view);
+//        svgView.start();
 
         Handler handler = new Handler();
         handler.postDelayed(() -> {
