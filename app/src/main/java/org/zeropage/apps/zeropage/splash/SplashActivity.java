@@ -6,12 +6,14 @@ import android.os.Bundle;
 import android.os.Handler;
 
 import com.crashlytics.android.Crashlytics;
-import com.google.firebase.crash.FirebaseCrash;
-import com.jrummyapps.android.widget.AnimatedSvgView;
 
 import io.fabric.sdk.android.Fabric;
 import org.zeropage.apps.zeropage.R;
+import org.zeropage.apps.zeropage.data_singleton.User;
 import org.zeropage.apps.zeropage.guide.GuideActivity;
+import org.zeropage.apps.zeropage.login.LoginActivity;
+import org.zeropage.apps.zeropage.main.MainActivity;
+import org.zeropage.apps.zeropage.utility.LocalData;
 
 public class SplashActivity extends Activity {
     @Override
@@ -25,9 +27,17 @@ public class SplashActivity extends Activity {
 
         Handler handler = new Handler();
         handler.postDelayed(() -> {
-            startActivity(new Intent(SplashActivity.this, GuideActivity.class));
+            if(LocalData.getFirstVisit(this)) { // 첫방문은 가이드로
+                startActivity(new Intent(SplashActivity.this, GuideActivity.class));
+            } else if(LocalData.getUserName(this) != null) { //로그인을 했었다면 메인으로
+                User.getInstance().setNickname(LocalData.getUserName(this));
+                startActivity(new Intent(SplashActivity.this, MainActivity.class));
+            } else {
+                startActivity(new Intent(SplashActivity.this, LoginActivity.class));
+            }
+
             finish();
-        }, 2*1000);
+        }, 1000);
 
         //crash report 테스트
 //        FirebaseCrash.report(new Exception("My first Android non-fatal error"));

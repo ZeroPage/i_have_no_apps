@@ -6,15 +6,12 @@ import android.os.AsyncTask;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.view.inputmethod.EditorInfo;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
@@ -28,12 +25,9 @@ import org.zeropage.apps.zeropage.network.common.RequestSender;
 import org.zeropage.apps.zeropage.network.function.SignUpRequest;
 import org.zeropage.apps.zeropage.network.login.LoginRequest;
 import org.zeropage.apps.zeropage.utility.Action;
-import org.zeropage.apps.zeropage.utility.UserInfoPreferences;
+import org.zeropage.apps.zeropage.utility.LocalData;
 
-import retrofit2.Call;
 import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.scalars.ScalarsConverterFactory;
 
 public class LoginActivity extends AppCompatActivity {
     private static final String TAG = "LoginActivity";
@@ -168,7 +162,7 @@ public class LoginActivity extends AppCompatActivity {
             Action onSuccessfulRequest = () -> {
                 //User 정보 저장
                 User.getInstance().setNickname(mUsernameEditText.getText().toString());
-                UserInfoPreferences.putUserName(LoginActivity.this, getTextFrom(mUsernameEditText));
+                LocalData.putUserName(LoginActivity.this, getTextFrom(mUsernameEditText));
                 mLoginProgressBar.setVisibility(View.INVISIBLE);
 
                 switchToMainActivity();
