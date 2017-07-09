@@ -1,20 +1,26 @@
 package org.zeropage.apps.zeropage.login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.support.annotation.StringRes;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.zeropage.apps.zeropage.R;
+import org.zeropage.apps.zeropage.data_singleton.User;
 import org.zeropage.apps.zeropage.log.ZpLog;
 import org.zeropage.apps.zeropage.main.MainActivity;
 import org.zeropage.apps.zeropage.network.common.CallbackWrapper;
@@ -51,6 +57,15 @@ public class LoginActivity extends AppCompatActivity {
     private void initWidget() {
         mLoginButton = (Button) findViewById(R.id.login_button);
         mTokenEditText = (EditText) findViewById(R.id.token_edit_text);
+        mTokenEditText.setOnEditorActionListener((v, actionId, event) -> {
+            if(actionId == EditorInfo.IME_ACTION_DONE)
+            {
+                new LoginTask().execute();
+                return true;
+            }
+            return false;
+        });
+
         mUsernameEditText = (EditText) findViewById(R.id.username_edit_text);
         mLoginProgressBar = (ProgressBar) findViewById(R.id.login_progress_bar);
     }
@@ -60,6 +75,9 @@ public class LoginActivity extends AppCompatActivity {
         Intent launchIntent = getPackageManager().getLaunchIntentForPackage(slackPackageName);
         if (launchIntent != null) {
             startActivity(launchIntent);
+            //키보드 띄우기
+            InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
+            inputMethodManager.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
         } else {
             ZpLog.i(TAG, "There is no slack application.");
         }
@@ -80,6 +98,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private void switchToMainActivity() {
+        Toast.makeText(getApplicationContext(), "로그인 성공\n"+User.getInstance().getNickname()+"님 환영합니다!", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(this, MainActivity.class));
         finish();
     }
@@ -147,9 +166,12 @@ public class LoginActivity extends AppCompatActivity {
 
         private CallbackWrapper<String> makeCallbackForSignUp() {
             Action onSuccessfulRequest = () -> {
-                switchToMainActivity();
+                //User 정보 저장
+                User.getInstance().setNickname(mUsernameEditText.getText().toString());
                 UserInfoPreferences.putUserName(LoginActivity.this, getTextFrom(mUsernameEditText));
                 mLoginProgressBar.setVisibility(View.INVISIBLE);
+
+                switchToMainActivity();
             };
 
             Action onFailureRequest = () -> notifyRequestFailureToUser(R.string.sign_up_error);
