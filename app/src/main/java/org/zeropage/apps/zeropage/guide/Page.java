@@ -20,7 +20,6 @@ import org.zeropage.apps.zeropage.login.LoginActivity;
  */
 public class Page extends Fragment {
     int page, img;
-    FloatingActionButton fab;
     public Page() {
 
     }

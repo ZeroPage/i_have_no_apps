@@ -11,7 +11,7 @@
     <color name="google_green">#34A853</color>
 
     <!-- Floating Action Button(FAB) -->
-    <color name="fab_primary">#45A1F5</color>
-    <color name="fab_pressed">#6EB5F7</color>
-    <color name="fab_ripple">#AED6FC</color>
+    <color name="fab_primary">#FFFFFFFF</color>
+    <color name="fab_pressed">#EEFFFFFF</color>
+    <color name="fab_ripple">#CCFFFFFF</color>
 </resources>
