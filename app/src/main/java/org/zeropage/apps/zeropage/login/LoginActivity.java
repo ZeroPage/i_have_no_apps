@@ -14,6 +14,7 @@ import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.crashlytics.android.Crashlytics;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.zeropage.apps.zeropage.R;
@@ -27,6 +28,7 @@ import org.zeropage.apps.zeropage.network.login.LoginRequest;
 import org.zeropage.apps.zeropage.utility.Action;
 import org.zeropage.apps.zeropage.utility.LocalData;
 
+import io.fabric.sdk.android.Fabric;
 import retrofit2.Response;
 
 public class LoginActivity extends AppCompatActivity {
@@ -41,7 +43,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-        // Fabric.with(this, new Crashlytics());
+        Fabric.with(this, new Crashlytics());
 
         initWidget();
         launchSlackApplication();
@@ -85,12 +87,6 @@ public class LoginActivity extends AppCompatActivity {
         return editText.getText().toString();
     }
 
-    private void notifyRequestFailureToUser(@StringRes int errorMessageId) {
-        ZpLog.e(TAG, "Request failure.");
-        mLoginProgressBar.setVisibility(View.INVISIBLE);
-        Toast.makeText(this, errorMessageId, Toast.LENGTH_SHORT).show();
-    }
-
     private void switchToMainActivity() {
         Toast.makeText(getApplicationContext(), "로그인 성공\n"+User.getInstance().getNickname()+"님 환영합니다!", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(this, MainActivity.class));
@@ -122,11 +118,6 @@ public class LoginActivity extends AppCompatActivity {
             loginSender.sendRequest(makeCallbackForLogin(), getTextFrom(mUsernameEditText), getTextFrom(mTokenEditText));
         }
 
-        Action onFailureRequest = () -> {
-            notifyRequestFailureToUser(R.string.sign_up_error);
-            ZpLog.e(TAG, "Sign up failed...");
-        };
-
         private CallbackWrapper<String> makeCallbackForLogin() {
             Action onSuccessfulRequest = this::sendSignUpRequest;
             Action onFailureRequest = () -> notifyRequestFailureToUser(R.string.login_error);
@@ -152,9 +143,9 @@ public class LoginActivity extends AppCompatActivity {
             signUpSender.sendRequest(makeCallbackForSignUp(), getTextFrom(mUsernameEditText), FirebaseInstanceId.getInstance().getToken());
         }
 
-
         private void notifyRequestFailureToUser(@StringRes int errorMessageId) {
             ZpLog.e(TAG, "Request failure.");
+            mLoginProgressBar.setVisibility(View.INVISIBLE);
             Toast.makeText(getApplicationContext(), errorMessageId, Toast.LENGTH_SHORT).show();
         }
 
