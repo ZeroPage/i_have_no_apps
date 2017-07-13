@@ -17,10 +17,6 @@ public final class RequestSender<T> {
     private Class<T> mRequestClass;
 
     public RequestSender(@NonNull Class<T> requestClass) {
-        if (!RequestHelper.isProperRequestClass(requestClass)) {
-            throw new IllegalArgumentException(EXCEPTION_MESSAGE);
-        }
-
         mRequestClass = requestClass;
     }
 

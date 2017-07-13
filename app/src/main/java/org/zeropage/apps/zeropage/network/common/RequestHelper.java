@@ -48,6 +48,7 @@ final class RequestHelper {
         return method.getReturnType().equals(Call.class);
     }
 
+    @Deprecated
     static <T> boolean isProperRequestClass(@NonNull Class<T> classInfo) {
         return hasFunctionalAnnotation(classInfo) &&
                 hasBaseUrl(classInfo) &&
